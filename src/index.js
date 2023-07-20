@@ -1,23 +1,23 @@
 "use strict";
 const pixels = [];
+const canvas = document.getElementById("canvas");
 function createCanvas() {
     const canvasSize = 8;
-    const canvas = document.getElementById("canvas");
     for (let x = 0; x < canvasSize; x++) {
         for (let y = 0; y < canvasSize; y++) {
             pixels.push({ x, y, active: false });
             const pixelBtn = createPixel({ x, y, active: false });
-            canvas === null || canvas === void 0 ? void 0 : canvas.append(pixelBtn);
+            canvas.append(pixelBtn);
         }
     }
 }
 function createPixel(pixel) {
     const pixelBtn = document.createElement('button');
     pixelBtn.id = `${pixel.x}-${pixel.y}`;
-    pixelBtn.addEventListener("click", function () {
-        updateState(pixel.x, pixel.y);
-        refreshCanvas();
-    });
+    // pixelBtn.addEventListener("click", function () {
+    //     updateState(pixel.x, pixel.y)
+    //     refreshCanvas()
+    // })
     return pixelBtn;
 }
 function updateState(x, y) {
@@ -25,6 +25,15 @@ function updateState(x, y) {
     if (pixelToUpdate)
         pixelToUpdate.active = !pixelToUpdate.active;
 }
+canvas.addEventListener("click", function (e) {
+    const target = e.target;
+    if (target.nodeName !== "BUTTON")
+        return;
+    const x = +target.id.split("-")[0];
+    const y = +target.id.split("-")[1];
+    updateState(x, y);
+    refreshCanvas();
+});
 function refreshCanvas() {
     for (const p of pixels) {
         const pixelBtn = document.getElementById(`${p.x}-${p.y}`);
